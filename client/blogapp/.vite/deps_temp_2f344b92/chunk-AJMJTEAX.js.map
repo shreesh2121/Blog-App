@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../node_modules/@mui/material/utils/useId.js", "../../node_modules/@mui/material/utils/useControlled.js"],
+  "sourcesContent": ["'use client';\n\nimport { unstable_useId as useId } from '@mui/utils';\nexport default useId;", "'use client';\n\nimport { unstable_useControlled as useControlled } from '@mui/utils';\nexport default useControlled;"],
+  "mappings": ";;;;;;;;;;AAAA,IAGO;AAHP;AAAA;AAAA;AAEA;AACA,IAAO,gBAAQ;AAAA;AAAA;;;ACHf,IAGO;AAHP;AAAA;AAAA;AAEA;AACA,IAAO,wBAAQ;AAAA;AAAA;",
+  "names": []
+}
