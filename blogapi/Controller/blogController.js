@@ -44,8 +44,9 @@ const updateBlog = async (req, res) => {
     }
   };
   const deleteBlog= async (req, res) => {
-    const blog = await Product.findByIdAndDelete(req.params.id);
+    const blog = await Blog.findByIdAndDelete(req.params.id);
     res.send("Item has been deleted");
+  
   };
 
 module.exports = { createBlog,updateBlog,deleteBlog ,getAllProducts};

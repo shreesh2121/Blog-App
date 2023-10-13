@@ -1,17 +1,21 @@
-// import { useState } from 'react'
+import React, { useState } from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 import './App.css'
-import Container from './Components/Container'
+import CreateBlog from './Components/CreateBlog'
+// import Container from './Components/Container'
 import Header from './Components/Header'
+import MyProfile from './Components/MyProfile'
+// import MyBlog from './Components/MyBlog'
 
 function App() {
-  // const [count, setCount] = useState(0)
-
+  
   return (
     <>
     <Header/>
-    <Container/>
+    <CreateBlog />
+    {/* <MyProfile blogs={blogs}/> */}
+    {/* <MyBlog/> */}
     </>
   )
 }
