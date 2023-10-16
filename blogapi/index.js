@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const { connectDB } = require("./Config/db");
+const cors = require('cors');
+
 const app = express();
 require("dotenv").config();
 connectDB();
@@ -16,6 +18,9 @@ app.use(
 // It is required for raw data(postman) otherwise it will show undefine
 app.use(express.json());
 // -------------------------------------------------
+
+// Allow requests from all origins (insecure, for development only)
+app.use(cors());
 
 app.use('/blogapi',require("./Routes/userRoute"))
 app.use('/blogapi',require("./Routes/blogRoute"))

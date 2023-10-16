@@ -3,7 +3,7 @@ const { register, login, verifyToken } = require("../Controller/userController")
 const router = express.Router();
 
 router.post("/register", register);
-router.post("/login", login);
+router.post("/login",verifyToken, login);
 
 // router.get('/user', verifyToken,protected);
 

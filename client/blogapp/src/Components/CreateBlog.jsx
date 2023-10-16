@@ -1,4 +1,5 @@
 import * as React from "react";
+import axios from 'axios';
 import { TextareaAutosize } from "@mui/base/TextareaAutosize";
 import { styled } from "@mui/system";
 import Box from "@mui/material/Box";
@@ -11,9 +12,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 export default function CreateBlog() {
   const [formData, setFormData] = useState({
-    name: "",
-    title: "",
-    content: "",
+    CreatedBy: "",
+    Title: "",
+    Description: "",
   });
 
   const handleChange = (e) => {
@@ -26,65 +27,54 @@ export default function CreateBlog() {
 
   const handleCreateBlog = () => {
     // Validate if any field is empty
-    if (!formData.name || !formData.title || !formData.content) {
-      toast.error("All fields are required.", { position: "top-right" });
+    if (!formData.CreatedBy || !formData.Title || !formData.Description) {
+      toast.error('All fields are required.', { position: 'top-right' });
       return;
     }
-  
+
     // Create a new blog post object
     const newBlogPost = {
-      name: formData.name,
-      title: formData.title,
-      content: formData.content,
+      CreatedBy: formData.CreatedBy,
+      Title: formData.Title,
+      Description: formData.Description,
     };
-  
-    // Send a POST request to your backend API to create the blog post
-    fetch("http://localhost:7000/blogapi/createblog", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newBlogPost),
-    })
+    console.log(newBlogPost);
+
+    // Send a POST request using Axios
+    axios
+      .post('http://localhost:7000/blogapi/createblog', newBlogPost )
       .then((response) => {
-        if (response.status === 200) {
-          return response.json();
-        } else {
-          throw new Error("Failed to create the blog post.");
-        }
-      })
-      .then((data) => {
         // Handle success, clear form, show success toast, or redirect to the created blog post
         setFormData({
-          name: "",
-          title: "",
-          content: "",
+          CreatedBy: '',
+          Title: '',
+          Description: '',
         });
-        toast.success("Blog post created successfully.", { position: "top-right" });
+        toast.success('Blog post created successfully.', { position: 'top-right' });
       })
       .catch((error) => {
         // Handle the error, show an error toast, or log the error
         console.error(error);
-        toast.error("Failed to create the blog post.", { position: "top-right" });
+        toast.error('Failed to create the blog post.', { position: 'top-right' });
       });
   };
   
 
   // const handleCreateBlog = () => {
     
-  //   if (!formData.name || !formData.title || !formData.content) {
+  //   if (!formData.CreatedBy || !formData.Title || !formData.Description) {
   //     toast.error("All fields are required.", { position: "top-right" });
   //     return;
   //   }
   //   setFormData({
-  //       name: "",
-  //       title: "",
-  //       content: "",
+  //       CreatedBy: "",
+  //       Title: "",
+  //       Description: "",
   //     });
   // };
   
 
-  const isCreateButtonDisabled = !formData.name || !formData.title || !formData.content;
+  const isCreateButtonDisabled = !formData.CreatedBy || !formData.Title || !formData.Description;
 
   const blue = {
     100: "#DAECFF",
@@ -157,8 +147,8 @@ export default function CreateBlog() {
             id="filled-basic"
             label="Enter your Name"
             variant="filled"
-            name="name"
-            value={formData.name}
+            name="CreatedBy"
+            value={formData.CreatedBy}
             onChange={handleChange}
             sx={{ flex: 1 }}
             // Let the TextField occupy the available width
@@ -171,8 +161,8 @@ export default function CreateBlog() {
             aria-label="empty textarea"
             placeholder="Enter Title"
             sx={{ width: "100%" }} // Make it 100% of the parent Box
-            name="title"
-            value={formData.title}
+            name="Title"
+            value={formData.Title}
             onChange={handleChange}
           />
         </Box>
@@ -182,8 +172,8 @@ export default function CreateBlog() {
             minRows={10}
             placeholder="Minimum 3 rows"
             sx={{ width: "100%" }}
-            name="content"
-            value={formData.content}
+            name="Description"
+            value={formData.Description}
             onChange={handleChange}
           />
         </Box>
