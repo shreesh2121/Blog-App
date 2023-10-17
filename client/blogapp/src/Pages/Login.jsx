@@ -40,8 +40,8 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function Login() {
-  const navigate=useNavigate();
+export default function Login({setUser}) {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -54,14 +54,6 @@ export default function Login() {
       [name]: value,
     });
   };
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   const data = new FormData(event.currentTarget);
-  //   console.log({
-  //     email: data.get('email'),
-  //     password: data.get('password'),
-  //   });
-  // };
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -90,11 +82,14 @@ export default function Login() {
           email: "",
           password: "",
         });
-        toast.success(response.data, {
-          position: "top-right",
-        });
-        navigate('/');
+
+        localStorage.setItem("token",response.data.token);
+        setUser(response.data.user); // Set the user data in the Home component
+
+        navigate("/")
+        
       })
+
       .catch((error) => {
         // Handle the error, show an error toast, or log the error
         console.error(error);

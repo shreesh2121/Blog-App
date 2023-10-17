@@ -1,10 +1,10 @@
 const express = require("express");
-const { register, login, verifyToken } = require("../Controller/userController");
+const { register, login, verifyToken, getin } = require("../Controller/userController");
 const router = express.Router();
 
 router.post("/register", register);
-router.post("/login",verifyToken, login);
-
+router.post("/login", login);
+// router.post("/login",verifyToken, login);
 // router.get('/user', verifyToken,protected);
 
 module.exports = router;

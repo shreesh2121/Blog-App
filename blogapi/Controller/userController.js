@@ -85,8 +85,8 @@ const login=async(req,res)=>{
     
           // Send the user data without the password and the token
           const userWithoutPasswordAndToken = { ...user.toObject() };
-          delete userWithoutPasswordAndToken.password;
-          delete userWithoutPasswordAndToken.token;
+          // delete userWithoutPasswordAndToken.password;
+          // delete userWithoutPasswordAndToken.token;
     
           res.status(200).json({
             user:userWithoutPasswordAndToken,
@@ -99,6 +99,18 @@ const login=async(req,res)=>{
         console.log(error);
       }
 }
+
+const getin=(req,res)=>{
+  res.status(200);
+  const user={
+    id:req.user._id,
+    name:req.user.name,
+    email:req.user.email,
+  };
+  res.send(user);
+}
+// getin code is for routes where authentication may not be necessary, and the user's information is sent back to the client without any significant checks.
+// getin Code: The getin code is a simplified endpoint handler that doesn't perform authentication checks. It simply returns the user's information if it's available in the req.user object. This code might be used in a scenario where the user's data is publicly accessible, or it's used for a different purpose where authentication isn't a requirement.
 
 
 // Middleware function to verify JWT tokens
@@ -144,7 +156,9 @@ const protected= async (req, res) => {
   }
 }
 
-module.exports={register,login,verifyToken,protected}
+// protected Code: The protected code is designed to protect a route that requires user authentication. It retrieves the user's data based on their ID and returns it. This route is commonly used to fetch user-specific data and may serve as a middleware to ensure the user is authenticated.
+
+module.exports={register,login,verifyToken,protected,getin}
 
 
 
