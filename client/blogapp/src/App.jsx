@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect} from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import CreateBlog from "./Components/CreateBlog";
@@ -8,21 +8,24 @@ import Header from "./Components/Header";
 import Register from "./Pages/Register";
 import Home from "./Components/Home";
 import Login from "./Pages/Login";
-// import MyBlog from "./Components/MyBlog";
-// import AllBlogs from "./Components/AllBlogs";
+import { useDispatch } from "react-redux";
+import { loadUser } from "./Redux/UserSlice";
+
 function App() {
-  const [user,setUser]=useState(null);
+  const dispatch=useDispatch();
+
+  useEffect(()=>{
+    dispatch(loadUser());
+  },[dispatch])
   return (
     <BrowserRouter className="App">
       <Header />
       <Routes>
-        <Route path="/" element={<Home user={user} />} />
+        <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login  setUser={setUser}/>} />
+        <Route path="/login" element={<Login/>} />
       </Routes>
-      {/* <CreateBlog /> */}
-      {/* <MyProfile blogs={blogs}/> */}
-      {/* <AllBlogs/> */}
+    
     </BrowserRouter>
   );
 }

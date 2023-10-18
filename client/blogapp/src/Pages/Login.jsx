@@ -17,6 +17,8 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Import the CSS for styling
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../Redux/UserSlice";
 
 function Copyright(props) {
   return (
@@ -40,7 +42,8 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function Login({setUser}) {
+export default function Login() {
+  const dispatch=useDispatch();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -82,9 +85,11 @@ export default function Login({setUser}) {
           email: "",
           password: "",
         });
+        dispatch(setUser(response.data.user)); 
 
         localStorage.setItem("token",response.data.token);
-        setUser(response.data.user); // Set the user data in the Home component
+        localStorage.setItem("user", JSON.stringify(response.data.user)); // Store user data as a string
+
 
         navigate("/")
         
