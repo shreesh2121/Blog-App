@@ -101,13 +101,15 @@ const login=async(req,res)=>{
 }
 
 const getin=(req,res)=>{
-  res.status(200);
-  const user={
-    id:req.user._id,
-    name:req.user.name,
-    email:req.user.email,
-  };
-  res.send(user);
+  res.send("getin running")
+  console.log("getin running")
+  // res.status(200);
+  // const user={
+  //   id:req.user._id,
+  //   name:req.user.name,
+    // email:req.user.email,
+  // };
+  // res.send(user);
 }
 // getin code is for routes where authentication may not be necessary, and the user's information is sent back to the client without any significant checks.
 // getin Code: The getin code is a simplified endpoint handler that doesn't perform authentication checks. It simply returns the user's information if it's available in the req.user object. This code might be used in a scenario where the user's data is publicly accessible, or it's used for a different purpose where authentication isn't a requirement.
@@ -118,22 +120,39 @@ const verifyToken = (req, res, next) => {
   // Get the token from the request header, query parameter, or cookie
   const token = req.header('Authorization');
   // const token = req.header('Authorization') || req.query.token || req.cookies.token;
+  console.log(token);
 
   if (!token) {
     return res.status(401).json({ message: 'Unauthorized - No token provided' });
-  }
+  } else {
+  
+      // Verify the token with your secret key (replace 'yourSecretKey' with your actual secret)
+      const tokenWithoutBearer = token.replace('Bearer ', ''); // Remove "Bearer " prefix
 
-  try {
-    // Verify the token with your secret key (replace 'yourSecretKey' with your actual secret)
-    const decoded = jwt.verify(token, 'shhhh');
+      const decoded = jwt.verify(tokenWithoutBearer, process.env.SECREAT_KEY);
+  
+      // Attach the decoded user information to the request for use in protected routes
+      console.log(decoded);
+      req.user = decoded;
+      next();
+    
+  }  
 
-    // Attach the decoded user information to the request for use in protected routes
-    req.user = decoded;
-    console.log(decoded);
-    next();
-  } catch (err) {
-    return res.status(401).json({ message: 'Unauthorized - Invalid token' });
-  }
+  // if (!token) {
+  //   return res.status(401).json({ message: 'Unauthorized - No token provided' });
+  // }
+
+  // try {
+  //   // Verify the token with your secret key (replace 'yourSecretKey' with your actual secret)
+  //   const decoded = jwt.verify(token, process.env.SECREAT_KEY);
+
+  //   // Attach the decoded user information to the request for use in protected routes
+  //   console.log(decoded);
+  //   req.user = decoded;
+  //   next();
+  // } catch (err) {
+  //   return res.status(401).json({ message: 'Unauthorized - Invalid token' });
+  // }
 };
 
 const protected= async (req, res) => {
@@ -198,6 +217,8 @@ module.exports={register,login,verifyToken,protected,getin}
 // Customization: You can customize the middleware to fit your specific requirements, such as using different secret keys for different routes or adding additional checks like token expiration or token revocation.
 
 // In summary, this middleware is a crucial component of authentication and authorization in a Node.js application, helping ensure that only authenticated and authorized users can access protected resources.
+
+
 
 
 

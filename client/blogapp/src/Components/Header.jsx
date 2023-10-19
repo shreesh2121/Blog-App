@@ -12,14 +12,16 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Logout, clearUser } from "../Redux/UserSlice";
 // import InputBase from "@mui/material/InputBase";
 // import SearchIcon from "@mui/icons-material/Search";
 const pages = ["Products", "Pricing", "Blog"];
-const settings = ["Profile", "Account", "Dashboard", "Login"];
+const settings = ["Profile", "Account", "Dashboard", "Login","Logout"];
 
 function Header() {
   const user = useSelector((state) => state.user);
+  const dispatch=useDispatch();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -37,6 +39,10 @@ function Header() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const handleLogout=()=>{
+    dispatch(Logout());
+  }
 
   return (
     <AppBar position="static">
@@ -153,7 +159,8 @@ function Header() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting}  onClick={setting === "Logout" ? handleLogout : handleCloseUserMenu}>
+                {/* <MenuItem key={setting}  onClick={ handleCloseUserMenu}> */}
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
