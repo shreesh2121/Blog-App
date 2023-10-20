@@ -10,6 +10,8 @@ import Home from "./Components/Home";
 import Login from "./Pages/Login";
 import { useDispatch } from "react-redux";
 import { loadUser } from "./Redux/UserSlice";
+// import MyEditor from "./Components/MyEditor";
+import CreateBlog from "./Components/CreateBlog";
 
 function App() {
   const dispatch=useDispatch();
@@ -20,10 +22,13 @@ function App() {
   return (
     <BrowserRouter className="App">
       <Header />
+      {/* <MyEditor/> */}
+      <CreateBlog/>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login/>} />
+
       </Routes>
     
     </BrowserRouter>

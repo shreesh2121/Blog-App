@@ -17,6 +17,8 @@
     "@mui/styled-engine-sc": "^5.14.12",
     "@reduxjs/toolkit": "^1.9.7",
     "axios": "^1.5.1",
+    "babel-polyfill": "^6.26.0",
+    "draft-js": "^0.11.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.1.3",

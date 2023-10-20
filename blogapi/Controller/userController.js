@@ -72,7 +72,7 @@ const login=async(req,res)=>{
         // match the password
       if (user && (await bcrypt.compare(password, user.password))) {      
         const token = jwt.sign(
-          {id:user._id , email:user.email},
+          {id:user._id},
           process.env.SECREAT_KEY,
         //   "shhhh", // Use process.env.jwtsecret in production
           {
@@ -101,42 +101,63 @@ const login=async(req,res)=>{
 }
 
 const getin=(req,res)=>{
-  res.send("getin running")
-  console.log("getin running")
-  // res.status(200);
-  // const user={
-  //   id:req.user._id,
-  //   name:req.user.name,
-    // email:req.user.email,
-  // };
-  // res.send(user);
+  // res.send("getin running")
+  // console.log("getin running")
+  res.status(200);
+  const user={
+    id:req.user._id,
+    name:req.user.name,
+    email:req.user.email,
+  };
+  res.send(user);
 }
 // getin code is for routes where authentication may not be necessary, and the user's information is sent back to the client without any significant checks.
 // getin Code: The getin code is a simplified endpoint handler that doesn't perform authentication checks. It simply returns the user's information if it's available in the req.user object. This code might be used in a scenario where the user's data is publicly accessible, or it's used for a different purpose where authentication isn't a requirement.
 
 
 // Middleware function to verify JWT tokens
-const verifyToken = (req, res, next) => {
-  // Get the token from the request header, query parameter, or cookie
-  const token = req.header('Authorization');
-  // const token = req.header('Authorization') || req.query.token || req.cookies.token;
-  console.log(token);
+const verifyToken =async (req, res, next) => {
+  // let token;
+  if (req.headers.authorization.startsWith('Bearer')){
+    try{
+      let token = req.headers.authorization.split(" ")[1]
+      const decoded = jwt.verify(token, process.env.SECREAT_KEY)
+      req.user = await User.findById(decoded.id).select("-password")
+      next()
+    }catch(error){
+      console.log(error);
+      res.status(401)
+      throw new Error("not authorized ")
+    }
+  }
+  else{
+    res.status(401)
+    throw new Error("Please login again")
+  }
 
-  if (!token) {
-    return res.status(401).json({ message: 'Unauthorized - No token provided' });
-  } else {
-  
-      // Verify the token with your secret key (replace 'yourSecretKey' with your actual secret)
-      const tokenWithoutBearer = token.replace('Bearer ', ''); // Remove "Bearer " prefix
 
-      const decoded = jwt.verify(tokenWithoutBearer, process.env.SECREAT_KEY);
+
+  // // Get the token from the request header, query parameter, or cookie
+  // const token = req.header('Authorization');
+  // // const token = req.header('Authorization') || req.query.token || req.cookies.token;
+  // console.log(token);
+
+  // if (!token) {
+  //   return res.status(401).json({ message: 'Unauthorized - No token provided' });
+  // } else {
   
-      // Attach the decoded user information to the request for use in protected routes
-      console.log(decoded);
-      req.user = decoded;
-      next();
+  //     // Verify the token with your secret key (replace 'yourSecretKey' with your actual secret)
+  //     const tokenWithoutBearer = token.replace('Bearer ', ''); // Remove "Bearer " prefix
+
+  //     const decoded = jwt.verify(tokenWithoutBearer, process.env.SECREAT_KEY);
+  //     req.user= User.findById(decoded.id).select("-password")
+  //     // Attach the decoded user information to the request for use in protected routes
+  //     // console.log(decoded);
+  //     // req.user = decoded;
+  //     console.log(req.user)
+  //     next();
     
-  }  
+  // }  
 
   // if (!token) {
   //   return res.status(401).json({ message: 'Unauthorized - No token provided' });

@@ -12,7 +12,9 @@ const UserSlice = createSlice({
       state.user = action.payload;
     },
     clearUser: (state) => {
-      state.user = null;
+      state.user = {};
+      localStorage.removeItem("user");
+
     },
   },
 });
@@ -40,7 +42,7 @@ export const loadUser = () => async (dispatch) => {
       );
       if (response.status === 200) {
         dispatch(setUser(response.data));
-        // console.log(response.data);
+        console.log(response.data);
       }
     }
   } catch (error) {
@@ -51,6 +53,8 @@ export const loadUser = () => async (dispatch) => {
 export const Logout=()=>(dispatch)=>{
     dispatch(clearUser());
     localStorage.removeItem("token")
+    // setLocalUser(null);
+
     // console.log(token);
 };
 
