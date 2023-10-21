@@ -1,80 +1,38 @@
 import * as React from "react";
-import axios from 'axios';
+import axios from "axios";
 import { TextareaAutosize } from "@mui/base/TextareaAutosize";
+import { TextareaAutosize as BaseTextareaAutosize } from "@mui/base/TextareaAutosize";
 import { styled } from "@mui/system";
 import Box from "@mui/material/Box";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { createBlogPost, deleteBlogPost, fetchAllBlogs, updateBlogPost } from "../Redux/BlogSlice";
+import { useDispatch, useSelector } from "react-redux";
+import "./CreateBlog.css"; // Import a CSS file for styling
+
+
 export default function CreateBlog() {
-  const [formData, setFormData] = useState({
-    CreatedBy: "",
-    Title: "",
-    Description: "",
-  });
+  const dispatch=useDispatch();
+  // const posts=useSelector((state)=>state.blogs.posts);
+  // const status=useSelector((state)=>state.blogs.status);
 
-  const handleChange = (e) => {
-    const {name,value}=e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  const [newPost, setNewPost] = useState({  CreatedBy: "",Title: "", Description: "" });
 
-  const handleCreateBlog = () => {
-    // Validate if any field is empty
-    if (!formData.CreatedBy || !formData.Title || !formData.Description) {
-      toast.error('All fields are required.', { position: 'top-right' });
-      return;
+
+  const handleCreatePost = () => {
+    if (newPost.Title && newPost.Description && newPost.CreatedBy) {
+      dispatch(createBlogPost(newPost));
+      setNewPost({ Title: "", Description: "", CreatedBy: "" });
     }
-
-    // Create a new blog post object
-    const newBlogPost = {
-      CreatedBy: formData.CreatedBy,
-      Title: formData.Title,
-      Description: formData.Description,
-    };
-    console.log(newBlogPost);
-
-    // Send a POST request using Axios
-    axios
-      .post('http://localhost:7000/blogapi/createblog', newBlogPost )
-      .then((response) => {
-        // Handle success, clear form, show success toast, or redirect to the created blog post
-        setFormData({
-          CreatedBy: '',
-          Title: '',
-          Description: '',
-        });
-        toast.success('Blog post created successfully.', { position: 'top-right' });
-      })
-      .catch((error) => {
-        // Handle the error, show an error toast, or log the error
-        console.error(error);
-        toast.error('Failed to create the blog post.', { position: 'top-right' });
-      });
   };
-  
 
-  // const handleCreateBlog = () => {
-    
-  //   if (!formData.CreatedBy || !formData.Title || !formData.Description) {
-  //     toast.error("All fields are required.", { position: "top-right" });
-  //     return;
-  //   }
-  //   setFormData({
-  //       CreatedBy: "",
-  //       Title: "",
-  //       Description: "",
-  //     });
-  // };
-  
-
-  const isCreateButtonDisabled = !formData.CreatedBy || !formData.Title || !formData.Description;
+  const isCreateButtonDisabled =
+    !newPost.CreatedBy || !newPost.Title || !newPost.Description;
 
   const blue = {
     100: "#DAECFF",
@@ -106,28 +64,41 @@ export default function CreateBlog() {
     height: "5rem",
   };
 
-  const StyledTextarea = styled("textarea")`
-  width: 100%;
-  font-family: IBM Plex Sans, sans-serif;
-  font-size: 0.875rem;
-  font-weight: 400;
-  line-height: 1.5;
-  padding: 12px;
-  border-radius: 12px;
-  color: ${({ theme }) => (theme.palette.mode === "dark" ? "#6e7781" : "#57606a")};
-  background: ${({ theme }) => (theme.palette.mode === "dark" ? "#57606a" : "#fff")};
-  border: 1px solid ${({ theme }) => (theme.palette.mode === "dark" ? "#424a53" : "#d0d7de")};
-  box-shadow: 0px 2px 2px ${({ theme }) => (theme.palette.mode === "dark" ? "#57606a" : "#d0d7de")};
+  const Textarea = styled(BaseTextareaAutosize)(
+    ({ theme }) => `
+    width: 320px;
+    font-family: IBM Plex Sans, sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    padding: 12px;
+    border-radius: 12px 12px 0 12px;
+    color: ${theme.palette.mode === "dark" ? grey[300] : grey[900]};
+    background: ${theme.palette.mode === "dark" ? grey[900] : "#fff"};
+    border: 1px solid ${theme.palette.mode === "dark" ? grey[700] : grey[200]};
+    box-shadow: 0px 2px 2px ${
+      theme.palette.mode === "dark" ? grey[900] : grey[50]
+    };
 
-  &:hover {
-    border-color: #3399FF;
-  }
+    &:hover {
+      border-color: ${blue[400]};
+    }
 
-  &:focus {
-    border-color: #3399FF;
-    box-shadow: 0 0 0 3px ${({ theme }) => (theme.palette.mode === "dark" ? "#0072E5" : "#DAECFF")};
-  }
-`;
+    &:focus {
+      border-color: ${blue[400]};
+      box-shadow: 0 0 0 3px ${
+        theme.palette.mode === "dark" ? blue[500] : blue[200]
+      };
+    }
+
+    // firefox
+    &:focus-visible {
+      outline: 0;
+    }
+  `
+  );
+
+
   return (
     <div>
       <Box
@@ -148,38 +119,43 @@ export default function CreateBlog() {
             label="Enter your Name"
             variant="filled"
             name="CreatedBy"
-            value={formData.CreatedBy}
-            onChange={handleChange}
+            value={newPost.CreatedBy}
+            onChange={(e) => setNewPost({ ...newPost, CreatedBy: e.target.value })}
+            // onChange={handleChange}
             sx={{ flex: 1 }}
             // Let the TextField occupy the available width
           />
         </Box>
+
         <Box sx={{ width: "50%", mb: 2 }}>
           {" "}
-          {/* Adjust the width and margin-bottom (mb) as needed */}
-          <StyledTextarea
+    
+          <textarea
             aria-label="empty textarea"
             placeholder="Enter Title"
-            sx={{ width: "100%" }} // Make it 100% of the parent Box
             name="Title"
-            value={formData.Title}
-            onChange={handleChange}
-          />
+            value={newPost.Title}
+            onChange={(e) => setNewPost({ ...newPost, Title: e.target.value })}
+            className="responsive-textarea"
+            />
         </Box>
+
         <Box sx={{ width: "50%" }}>
-          <StyledTextarea
-            aria-label="minimum height"
-            minRows={10}
-            placeholder="Minimum 3 rows"
-            sx={{ width: "100%" }}
+
+        <textarea
+            aria-label="empty textarea"
+            placeholder="Description"
             name="Description"
-            value={formData.Description}
-            onChange={handleChange}
+            value={newPost.Description}
+            onChange={(e) => setNewPost({ ...newPost, Description: e.target.value })}
+            className="responsive-textarea"
+            sx={{ width:"100%" }}
           />
+  
         </Box>
         <Button
           variant="contained"
-          onClick={handleCreateBlog}
+          onClick={handleCreatePost}
           disabled={isCreateButtonDisabled}
         >
           Create Blog

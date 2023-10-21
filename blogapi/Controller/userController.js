@@ -159,21 +159,6 @@ const verifyToken =async (req, res, next) => {
     
   // }  
 
-  // if (!token) {
-  //   return res.status(401).json({ message: 'Unauthorized - No token provided' });
-  // }
-
-  // try {
-  //   // Verify the token with your secret key (replace 'yourSecretKey' with your actual secret)
-  //   const decoded = jwt.verify(token, process.env.SECREAT_KEY);
-
-  //   // Attach the decoded user information to the request for use in protected routes
-  //   console.log(decoded);
-  //   req.user = decoded;
-  //   next();
-  // } catch (err) {
-  //   return res.status(401).json({ message: 'Unauthorized - Invalid token' });
-  // }
 };
 
 const protected= async (req, res) => {

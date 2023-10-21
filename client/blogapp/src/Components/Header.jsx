@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Logout, clearUser } from "../Redux/UserSlice";
 // import InputBase from "@mui/material/InputBase";
 // import SearchIcon from "@mui/icons-material/Search";
-const pages = ["Products", "Pricing", "Blog"];
+const pages = ["Products", "Pricing", "Create Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Login","Logout"];
 
 function Header() {
@@ -44,6 +44,10 @@ function Header() {
     dispatch(Logout());
   }
 
+  const handleCreateBlog=()=>{
+
+  }
+  
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -159,7 +163,7 @@ function Header() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting}  onClick={setting === "Logout" ? handleLogout : handleCloseUserMenu}>
+                <MenuItem key={setting}  onClick={setting === "Logout" ? handleLogout : (setting === "Create Blog" ? handleCreateBlog : handleCloseUserMenu)}>
                 {/* <MenuItem key={setting}  onClick={ handleCloseUserMenu}> */}
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>

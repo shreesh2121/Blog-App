@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 // import { clearUser } from "../Redux/UserSlice";
 function Home() {
   const user = useSelector((state) => state.user);
-  console.log(user.user.name);
   const [localUser, setLocalUser] = useState(null);
   useEffect(() => {
     // Get user data from local storage

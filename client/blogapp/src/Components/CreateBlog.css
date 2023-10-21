@@ -1,0 +1,11 @@
+.responsive-textarea {
+  width: 100%; /* Make the textarea take 100% of its container's width */
+  /* Add any additional styling for responsiveness here */
+}
+
+/* Media query for adjusting the textarea width at different screen sizes */
+@media (max-width: 768px) {
+  .responsive-textarea {
+    width: 90%; /* Adjust the width as needed for smaller screens */
+  }
+}
