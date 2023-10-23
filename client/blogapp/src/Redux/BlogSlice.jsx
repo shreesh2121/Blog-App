@@ -1,7 +1,7 @@
 import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import axios from "axios";
 
-axios.defaults.maxBodyLength="http://localhost:7000/blogapi";
+axios.defaults.baseURL="http://localhost:7000/blogapi";
 
 export const fetchAllBlogs=createAsyncThunk("blogs/fetchAllBlogs",async()=>{
     const response=await axios.get("/getallproduct");
@@ -41,14 +41,14 @@ const BlogSlice=createSlice({
         })
         .addCase(fetchAllBlogs.fulfilled,(state,action)=>{
             state.status="succeeded";
-            state.data=action.payload;
+            state.posts=action.payload;
             state.error=null;
         })
         .addCase(fetchAllBlogs.rejected,(state)=>{
             state.status="failed";
             state.error=action.error.message;
         })
-        .addCase(createdBlogPost.fulfilled,(state,action)=>{
+        .addCase(createBlogPost.fulfilled,(state,action)=>{
             state.status="succeeded";
             state.posts.push(action.payload);
         })
@@ -64,7 +64,7 @@ const BlogSlice=createSlice({
             state.status="succeeded";
             state.postI=action.payload;
             state.posts = state.posts.filter((post) => post.id !== postId);
-
+           
         })
     }
 })

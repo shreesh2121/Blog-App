@@ -23,7 +23,7 @@ function App() {
     <BrowserRouter className="App">
       <Header />
       {/* <MyEditor/> */}
-      <CreateBlog/>
+      {/* <CreateBlog/> */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />

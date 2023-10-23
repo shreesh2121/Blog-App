@@ -1,12 +1,25 @@
-import React from 'react'
-import BlogCard from './BlogCard'
+import * as React from 'react';
+import BlogCard from "./BlogCard";
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAllBlogs } from '../Redux/BlogSlice';
 
-function AllBlogs() {
+export default function AllBlogs() {
+
+  const dispatch=useDispatch();
+  const blogs=useSelector((state)=>state.blog.posts);
+
+  useEffect(()=>{
+    dispatch(fetchAllBlogs());
+  },[]);
+  console.log(blogs)
+
   return (
     <div>
-        <BlogCard/>
+      {blogs.map((blog,i)=>(
+    <BlogCard key={i} blog={blog}/>
+      ))}
     </div>
-  )
+   
+  );
 }
-
-export default AllBlogs

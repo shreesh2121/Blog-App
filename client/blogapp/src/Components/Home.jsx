@@ -2,7 +2,6 @@ import React from "react";
 import AllBlogs from "./AllBlogs";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-// import { clearUser } from "../Redux/UserSlice";
 function Home() {
   const user = useSelector((state) => state.user);
   const [localUser, setLocalUser] = useState(null);
@@ -23,20 +22,9 @@ console.log(user.user.name);
 
     <div>
       {user?.user?.name}
-      {/* {userName ? <p>Welcome, {userName}</p> : <p>Welcome to our blog!</p>} */}
       <AllBlogs />
     </div>
-    //  <div>
-    //   {user.user && user.user.name ? (
-    //     <p>Welcome, {user.user.name}</p>
-    //   ) : (localUser && localUser.name ? (
-    //     <p>Welcome, {localUser.name}</p>
-    //   ) : (
-    //     <p>Welcome to our blog!</p>
-    //   )
-    //   )}
-    //   <AllBlogs />
-    // </div>
+  
   
   );
 }

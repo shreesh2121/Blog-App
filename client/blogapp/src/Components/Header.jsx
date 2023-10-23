@@ -12,10 +12,12 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import {  Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { useDispatch, useSelector } from "react-redux";
 import { Logout, clearUser } from "../Redux/UserSlice";
-// import InputBase from "@mui/material/InputBase";
-// import SearchIcon from "@mui/icons-material/Search";
+import CreateBlog from "./CreateBlog";
+import { useState } from "react";
+import CloseIcon from '@mui/icons-material/Close';
 const pages = ["Products", "Pricing", "Create Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Login","Logout"];
 
@@ -24,6 +26,7 @@ function Header() {
   const dispatch=useDispatch();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [isCreateBlogDialogOpen, setIsCreateBlogDialogOpen] = useState(false); // Add state for the Create Blog dialog
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -44,11 +47,17 @@ function Header() {
     dispatch(Logout());
   }
 
-  const handleCreateBlog=()=>{
+  const handleCreateBlogPopup = () => {
+    setIsCreateBlogDialogOpen(true); // Open the Create Blog dialog
+    handleCloseUserMenu(); // Close the user menu
+  };
 
-  }
+  const closeCreateBlogDialog = () => {
+    setIsCreateBlogDialogOpen(false); // Close the Create Blog dialog
+  };
   
   return (
+    <div>
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
@@ -101,7 +110,11 @@ function Header() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page}  onClick={
+                  page === "Create Blog"
+                    ? handleCreateBlogPopup
+                    : handleCloseNavMenu
+                }>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
@@ -132,9 +145,14 @@ function Header() {
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                onClick={
+                  page === "Create Blog"
+                    ? handleCreateBlogPopup
+                    : handleCloseNavMenu
+                }
                 sx={{ my: 2, color: "white", display: "block" }}
               >
+
                 {page}
               </Button>
             ))}
@@ -173,6 +191,32 @@ function Header() {
         </Toolbar>
       </Container>
     </AppBar>
+    <Dialog
+        open={isCreateBlogDialogOpen}
+        onClose={closeCreateBlogDialog}
+        fullWidth
+        maxWidth="md"
+      >
+        <IconButton
+          edge="end"
+          color="inherit"
+          onClick={closeCreateBlogDialog}
+          aria-label="close"
+          sx={{ position: 'absolute', top: 0, right: 0, zIndex: 1 }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <DialogTitle>Create Blog</DialogTitle>
+        <DialogContent>
+          <CreateBlog />
+        </DialogContent>
+        <DialogActions>
+          {/* <Button onClick={closeCreateBlogDialog} color="primary">
+            Close
+          </Button> */}
+        </DialogActions>
+      </Dialog>
+    </div>
   );
 }
 export default Header;
